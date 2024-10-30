@@ -1,0 +1,85 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Dashboard</title>
+  <link href="{% static 'img/favicon.png'%}" rel="icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+</head>
+
+<body>
+    <main id="main" class="main">
+    <section class="section">
+        <div class="row">
+          <div class="col-lg-6">
+  
+            <div class="card">
+                    <div class="card-body">
+                      <h1 class="card-title">{{ user.first_name }} dan kelgan xabarlar</h1>
+                      <ul class="messag">
+                          {% for message in messages %}
+                          <h5 >{{ message.text }} - {{ message.date }}</p>
+                          {% endfor %}
+                      </ul>
+                  
+                      <h2 class="card-title">Yangi xabar yuborish</h2>
+                      <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_text">Xabar matni:</label>
+                            <textarea id="id_text" name="text" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_url">Button uchun url:</label>
+                            <input name="url" class="form-control" id="id_url" >                            
+                        </div>
+                        <div class="d-flex" style="gap: 30px;">
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="file" id="id_image" name="image" style="display: none;" onchange="updateFileName()">
+                                <label for="id_image" style="cursor: pointer;">
+                                    <h1><i class="bi bi-image" style="max-width: 150px;"></i></h1>
+                                </label>
+                            </div>
+    
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="file" id="id_video" name="video" style="display: none;" onchange="updateFileName()">
+                                <label for="id_video" style="cursor: pointer;">
+                                    <h1><i class="bi-grid" style="max-width: 150px;"></i></h1>
+                                </label>
+                            </div>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary">Yuborish</button>
+                    </form>
+                    </div>
+                  </div>
+                  
+            </div>
+          </div>
+        </div>
+    </section>
+    </main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'vendor/apexcharts/apexcharts.min.js'%}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'vendor/chart.js/chart.umd.js'%}"></script>
+<script src="{% static 'vendor/echarts/echarts.min.js'%}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static 'assets/js/main.js'%}"></script>
+
+</body>
+<style>
+    
+</style>
+</html>
+{% endblock %}

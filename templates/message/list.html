@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends 'base/base.html' %}
+    {% load static %}
+    {% block content %}
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Forms / Elements - NiceAdmin Bootstrap Template</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png'%}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png'%}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/simple-datatables/style.css'%}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+    <!-- SheetJS Library for Export to Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <main id="main" class="main">
+        <div class="message-container">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+    
+        </div>
+        <div class="pagetitle">
+          <h1>Barcha foydalanuvchilar jadvali</h1>
+        </div><!-- End Page Title -->
+    
+        <section class="section">
+          <div class="row">
+            <div class="col-lg-12">
+    
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Barcha Foydalanuvchilar</h5>
+                  <div class="mb-3">
+                    <button class="btn btn-light filter-btn" style="border: 1px;" onclick="filterTable('all')">Hammasi</button>
+                    <button class="btn btn-light filter-btn" style="border: 1px;" onclick="filterTable('paid')">To'lov qilganlar</button>
+                    <button class="btn btn-light filter-btn" style="border: 1px;"  onclick="filterTable('unpaid')">To'lov qilmaganlar</button>
+                    <a href="{% url 'export_users_to_excel' %}" class="btn btn-primary">Export to Excel</a>
+
+                  </div>
+                  <table id="dataTable" class="table datatable" style="display: block;width: 100%;overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <thead>
+                      <tr>
+                          <th>Telegram ID</th>
+                          <th>Ismi</th>
+                          <th>Telefon</th>
+                          <th>Username</th>
+                          <th>Holat</th>
+                          <th>Amal</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for item in payments %}
+                      <tr class="{% if item.has_payment %}paid{% else %}unpaid{% endif %}">
+                          <td><a href="">{{item.user.telegram_id}}</a></td>
+                          <td>{{ item.user.first_name }}</td>
+                          <td>{{ item.user.phone }}</td>
+                          <td>{{ item.user.username }}</td>
+                          {% if item.has_payment %}
+                             <td style="color: #6de60a;">To'lov qilingan</td>
+                          {% else %}
+                              <td style="color: #9e0505;">To'lov qilinmagan</td>
+                          {% endif %}
+                          <td>
+                              <a href="{% url 'send_message' item.user.telegram_id %}" class="btn btn-primary">Xabar Yuborish</a>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+                  </table>
+                  <!-- End Table with stripped rows -->
+    
+                </div>
+              </div>
+    
+            </div>
+          </div>
+        </section>
+    
+      </main><!-- End #main -->
+    
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <script src="{% static 'vendor/simple-datatables/simple-datatables.js'%}"></script>
+    <script src="{% static 'vendor/tinymce/tinymce.min.js'%}"></script>
+
+    <!-- Template Main JS File -->
+    <script>
+      function filterTable(status) {
+          var rows = document.querySelectorAll("#dataTable tbody tr");
+          rows.forEach(function(row) {
+              row.style.display = "table-row"; // Show all rows
+              if (status === 'paid' && !row.classList.contains('paid')) {
+                  row.style.display = "none"; // Hide unpaid rows
+              } else if (status === 'unpaid' && !row.classList.contains('unpaid')) {
+                  row.style.display = "none"; // Hide paid rows
+              } else if (status === 'all') {
+                  row.style.display = "table-row"; // Show all rows for 'Hammasi'
+              }
+          });
+
+          // Update button styles
+          var buttons = document.querySelectorAll('.filter-btn');
+          buttons.forEach(function(button) {
+              button.classList.remove('btn-primary'); // Reset to light color
+              button.classList.add('btn-light');
+          });
+          event.target.classList.remove('btn-light'); // Set clicked button to primary color
+          event.target.classList.add('btn-primary');
+      }
+  </script>
+
+</body>
+</html>
+{% endblock content %}

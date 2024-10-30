@@ -1,0 +1,221 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Uzum-servis</title>
+  <link href="{% static 'img/favicon.png'%}" rel="icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+</head>
+
+<body>
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+  </div><!-- End Page Title -->
+<div class="message-container">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                </div>
+  <section class="section dashboard">
+    <div class="row">
+
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Foydalanuvchilar soni <span>| ummimiy soni</span></h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6 class="text-success">{{users}}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Sales Card -->
+
+          <!-- Revenue Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card revenue-card">
+              <div class="card-body">
+                <h5 class="card-title">To'lov qilganlar soni <span>| Ummimiy soni</span></h5>
+                <span class="text-success small pt-1 fw-bold">Jami summa: </span>{{summa_payments}} <span class="text-muted small pt-2 ps-1">so'm</span>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-currency-dollar"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{all_payments}}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Revenue Card -->
+
+          <!-- Customers Card -->
+          <div class="col-xxl-4 col-xl-12">
+            <div class="card info-card customers-card">
+              <div class="card-body">
+                <h5 class="card-title">To'lov qilmaganlar soni <span>| Umumiy soni</span></h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{no_payments}}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Customers Card -->
+
+            <div>
+  <button id="weeklyBtn" class="btn btn-primary">Haftalik</button>
+  <button id="monthlyBtn" class="btn btn-secondary">Oylik</button>
+</div>
+
+<canvas id="barChart" style="max-height: 400px;"></canvas>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const dateLabels = JSON.parse(document.getElementById('dateLabels').textContent);
+    const registrationData = JSON.parse(document.getElementById('registrationData').textContent);
+    const paymentData = JSON.parse(document.getElementById('paymentData').textContent);
+
+    const barChart = new Chart(document.querySelector('#barChart'), {
+      type: 'bar',
+      data: {
+        labels: dateLabels,
+        datasets: [
+          {
+            label: "Ro'yxatdan o'tganlar soni",
+            data: registrationData,
+            backgroundColor: '#0d6efdd1',
+            borderColor: 'rgb(255, 99, 132)',
+            borderWidth: 1
+          },
+          {
+            label: "To'lov qilganlar soni",
+            data: paymentData,
+            backgroundColor: '#ffc107ba',
+            borderColor: 'rgb(255, 159, 64)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Toggle between weekly and monthly data
+    document.getElementById('weeklyBtn').addEventListener('click', () => {
+      window.location.href = "?filter_type=weekly";
+    });
+    document.getElementById('monthlyBtn').addEventListener('click', () => {
+      window.location.href = "?filter_type=monthly";
+    });
+  });
+</script>
+
+{{ date_range|json_script:"dateLabels" }}
+{{ daily_registration|json_script:"registrationData" }}
+{{ daily_payments|json_script:"paymentData" }}
+          </div>
+      </div><!-- End Left side columns -->
+
+      <!-- Right side columns -->
+      <div class="col-lg-4">
+        <!-- Website Traffic -->
+        <div class="card">
+          <div class="card-body pb-0">
+            <h5 class="card-title">To'lov qilganlar va to'lov qilmaganlar grafigi <span>| hozirgacha </span></h5>
+            <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                echarts.init(document.querySelector("#trafficChart")).setOption({
+                  tooltip: {
+                    trigger: 'item'
+                  },
+                  legend: {
+                    top: '5%',
+                    left: 'center'
+                  },
+                  series: [{
+                    name: 'Umumiy soni',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                      show: false,
+                      position: 'center'
+                    },
+                    emphasis: {
+                      label: {
+                        show: true,
+                        fontSize: '18',
+                        fontWeight: 'bold'
+                      }
+                    },
+                    labelLine: {
+                      show: false
+                    },
+                    data: [{
+                        value: '{{no_payments}}',
+                        name: 'To\'lov qilmagan'
+                      },
+                      {
+                        value: '{{all_payments}}',
+                        name: 'To\'lov qilgan'
+                      }
+                    ]
+                  }]
+                });
+              });
+            </script>
+          </div>
+        </div><!-- End Website Traffic -->
+      </div><!-- End Right side columns -->
+    </div>
+  </section>
+</main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'vendor/apexcharts/apexcharts.min.js'%}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'vendor/chart.js/chart.umd.js'%}"></script>
+<script src="{% static 'vendor/echarts/echarts.min.js'%}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static 'assets/js/main.js'%}"></script>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Dashboard</title>
+  <link href="{% static 'img/favicon.png'%}" rel="icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+</head>
+
+<body>
+    <main id="main" class="main">
+    <section class="section">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="message-container">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+        
+            </div>
+            <div class="card">
+                    <div class="card-body">
+                      <h1 class="card-title">{{title}}</h1>
+                      <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" name="message"></textarea><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="url">Button uchun url:</label>
+                            <input name="url" class="form-control" id="url" >                            
+                        </div>
+                        <div class="d-flex" style="gap: 30px;">
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="file" id="image" accept="image/*" name="image" style="display: none;" onchange="updateFileName()">
+                                <label for="image" style="cursor: pointer;">
+                                    <h1><i class="bi bi-image" style="max-width: 150px;"></i></h1>
+                                </label>
+                            </div>
+    
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="file" id="video" name="video" accept="video/*" style="display: none;" onchange="updateFileName()">
+                                <label for="video" style="cursor: pointer;">
+                                    <h1><i class="bi bi-caret-right-square-fill" style="max-width: 150px;"></i></h1>
+                                </label>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="file" id="video_note" name="video_note" accept="video/*" style="display: none;" onchange="updateFileName()">
+                                <label for="video_note" style="cursor: pointer;">
+                                    <h1><i class="bi bi-play-circle-fill" style="max-width: 150px;"></i></h1>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Yuborish</button>
+                    </form>
+                    </div>
+                  </div>
+                  
+            </div>
+          </div>
+        </div>
+    </section>
+    </main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'vendor/apexcharts/apexcharts.min.js'%}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'vendor/chart.js/chart.umd.js'%}"></script>
+<script src="{% static 'vendor/echarts/echarts.min.js'%}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static 'assets/js/main.js'%}"></script>
+
+</body>
+<style>
+    
+</style>
+</html>
+{% endblock %}

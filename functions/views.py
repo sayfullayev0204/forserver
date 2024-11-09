@@ -17,7 +17,7 @@ def home(request):
 
     users = TelegramUser.objects.all().count()+5056
     all_payments = Payment.objects.filter(is_confirmed=True).values('user').distinct().count()+435
-    summa_payments = all_payments * 97000+42195000
+    summa_payments = all_payments * 47000
     no_payments = users - all_payments
 
     today = now().date()
@@ -98,7 +98,7 @@ def confirm_payment(request, payment_id):
         payment.user.telegram_id,
         f"{first_name} To'lov chekingiz muvaffaqiyatli tasdiqlandi.\n\nSizga Workshop darslari uchun Yopiq Kanalimiz uchun dostup yuboryapman.\n\nPastdagi tugmani bosib yopiq kanalimizga qo'shilib oling.\n\nTez orada darslarni boshlemiz!",
         inline_button_text="YOPIQ KANALGA QO'SHILISH",
-        inline_button_url="https://t.me/+tMgKG_O6n503ZmRi"  
+        inline_button_url="https://t.me/+jRRSG8v9gAVkMzMy"  
     )
     
     messages.success(request, "To'lov tasdiqlandi.")

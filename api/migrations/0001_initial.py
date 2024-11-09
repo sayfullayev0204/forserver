@@ -8,39 +8,74 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='TelegramUser',
+            name="TelegramUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('telegram_id', models.BigIntegerField(unique=True)),
-                ('first_name', models.CharField(max_length=100)),
-                ('last_name', models.CharField(blank=True, max_length=100)),
-                ('username', models.CharField(blank=True, max_length=100)),
-                ('date', models.DateField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("telegram_id", models.BigIntegerField(unique=True)),
+                ("first_name", models.CharField(max_length=100)),
+                ("last_name", models.CharField(blank=True, max_length=100)),
+                ("username", models.CharField(blank=True, max_length=100)),
+                ("date", models.DateField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('chek', models.ImageField(upload_to='check/')),
-                ('is_confirmed', models.BooleanField(default=False)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.telegramuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("chek", models.ImageField(upload_to="check/")),
+                ("is_confirmed", models.BooleanField(default=False)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="api.telegramuser",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.TextField()),
-                ('image', models.ImageField(blank=True, upload_to='message/')),
-                ('video', models.FileField(blank=True, upload_to='message/')),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.telegramuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("text", models.TextField()),
+                ("image", models.ImageField(blank=True, upload_to="message/")),
+                ("video", models.FileField(blank=True, upload_to="message/")),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="api.telegramuser",
+                    ),
+                ),
             ],
         ),
     ]

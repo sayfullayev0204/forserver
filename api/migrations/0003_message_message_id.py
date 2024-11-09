@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0002_channel_alter_message_text'),
+        ("api", "0002_channel_alter_message_text"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='message',
-            name='message_id',
+            model_name="message",
+            name="message_id",
             field=models.BigIntegerField(blank=True, null=True),
         ),
     ]

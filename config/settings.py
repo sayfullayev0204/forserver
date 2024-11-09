@@ -160,6 +160,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://komilxon-wk.uz",
 ]
 
+# Maksimal fayl hajmini baytlarda (bu yerda 50 MB qilib ko'rsatilgan)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
+
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",

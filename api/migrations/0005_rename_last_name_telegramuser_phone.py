@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_message_url'),
+        ("api", "0004_message_url"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='telegramuser',
-            old_name='last_name',
-            new_name='phone',
+            model_name="telegramuser",
+            old_name="last_name",
+            new_name="phone",
         ),
     ]
